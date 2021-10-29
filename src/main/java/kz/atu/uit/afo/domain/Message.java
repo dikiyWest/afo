@@ -1,12 +1,17 @@
 package kz.atu.uit.afo.domain;
 
+import org.hibernate.validator.constraints.Length;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
+    @NotBlank(message = "Please fill the message")
+    @Length(max = 3,message = "Message too long")
     private String text;
     private String tag;
     @ManyToOne(fetch = FetchType.EAGER)
