@@ -11,7 +11,7 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     @NotBlank(message = "Please fill the message")
-    @Length(max = 3,message = "Message too long")
+    @Length(max = 255,message = "Message too long")
     private String text;
     private String tag;
     @ManyToOne(fetch = FetchType.EAGER)

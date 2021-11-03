@@ -56,17 +56,17 @@ public class MainController {
     public String add(
             @AuthenticationPrincipal User user,
             @Valid Message message,
-            @RequestParam("file") MultipartFile file,
             BindingResult bindingResult,
-            Model model) throws IOException {
+            Model model,
+            @RequestParam("file") MultipartFile file) throws IOException {
         message.setAuthor(user);
 
         if (bindingResult.hasErrors()) {
             Map<String, String> errorsMap = ControllerUtill.getErrors(bindingResult);
-            model.mergeAttributes(errorsMap);
-            model.addAttribute("message",message);
-        } else {
 
+            model.mergeAttributes(errorsMap);
+            model.addAttribute("message", message);
+        } else {
             if (file != null && !file.getOriginalFilename().isEmpty()) {
                 File uploadDir = new File(uploadPath);
                 if (!uploadDir.exists()) {
@@ -79,14 +79,13 @@ public class MainController {
                 message.setFilename(resultFileName);
             }
 
-            model.addAttribute("message",null);
+            model.addAttribute("message", null);
             messageRepository.save(message);
         }
         Iterable<Message> messages = messageRepository.findAll();
         model.addAttribute("messages", messages);
         return "main";
     }
-
 
 
 }
