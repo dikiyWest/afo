@@ -23,18 +23,18 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        User user =  userRepository.findByUsername(s);
+        User user = userRepository.findByUsername(s);
 
-        if(user ==null){
+        if (user == null) {
             throw new UsernameNotFoundException("Пользователь не существует");
         }
         return user;
     }
 
-    public boolean addUser(User user){
+    public boolean addUser(User user) {
         User userFromDb = userRepository.findByUsername(user.getUsername());
-        if(userFromDb != null){
-           return false;
+        if (userFromDb != null) {
+            return false;
         }
         user.setActive(true);
         user.setRoles(Collections.singleton(Role.USER));
@@ -47,7 +47,7 @@ public class UserService implements UserDetailsService {
         return userRepository.findAll();
     }
 
-    public void saveUser(User user, String username, Map<String,String> form) {
+    public void saveUser(User user, String username, Map<String, String> form) {
         user.setUsername(username);
 
         Set<String> roles = Arrays.stream(Role.values())
@@ -61,6 +61,16 @@ public class UserService implements UserDetailsService {
                 user.getRoles().add(Role.valueOf(key));
             }
         }
+        userRepository.save(user);
+    }
+
+    public void subscribe(User currentUser, User user) {
+        user.getSubscribers().add(currentUser);
+        userRepository.save(user);
+    }
+
+    public void unsubscribe(User currentUser, User user) {
+        user.getSubscribers().remove(currentUser);
         userRepository.save(user);
     }
 }

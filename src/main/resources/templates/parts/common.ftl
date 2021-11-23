@@ -10,6 +10,8 @@
 
     <title>Spring Security Example </title>
     <link rel="stylesheet" href="/static/style.css">
+    <link href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" rel="stylesheet">
+
 </head>
 <body>
 <#include "navbar.ftl">
