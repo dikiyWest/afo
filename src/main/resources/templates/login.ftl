@@ -8,6 +8,5 @@
     </div>
     </#if>
 <@l.login "/login"/>
-<a href="/registration">Add new user</a>
 
 </@c.page>

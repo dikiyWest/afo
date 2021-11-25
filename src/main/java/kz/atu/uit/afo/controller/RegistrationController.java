@@ -28,10 +28,6 @@ public class RegistrationController {
     @GetMapping("/registration")
     public String registration(Model model){
         Iterable<Region> region = regionRepository.findAll();
-        User user = new User();
-        user.setRoles(Collections.singleton(Role.Гость));
-        user.setActive(true);
-        model.addAttribute("user",user);
         model.addAttribute("roles", Role.values());
         model.addAttribute("regions", region);
         return "registration";
@@ -48,12 +44,12 @@ public class RegistrationController {
             model.mergeAttributes(errors);
             return "registration";
         }
-        if(!userService.addUser(user,form)){
+        if(!userService.addUser(user,form,region)){
             model.addAttribute("usernameError","User exists!");
             return "registration";
         }
 
-        user.setRegion(region);
+
         return "redirect:/login";
     }
 }

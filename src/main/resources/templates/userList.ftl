@@ -1,7 +1,7 @@
 <#import "parts/common.ftl" as c>
 <@c.page>
 
-
+<a href="/registration">Add new user</a>
 
 <table class="table table-striped">
     <thead>

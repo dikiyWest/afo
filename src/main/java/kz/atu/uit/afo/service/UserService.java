@@ -38,13 +38,25 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
-    public boolean addUser(User user, Map<String, String> form) {
+    public boolean addUser(User user, Map<String, String> form, Region region) {
         User userFromDb = userRepository.findByUsername(user.getUsername());
         if (userFromDb != null) {
             return false;
         }
-        System.out.println(user.toString());
-        saveUser(user,user.getUsername(),form);
+
+
+        user.setRegion(region);
+        user.setRoles(new HashSet<>());
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        Set<String> roles = Arrays.stream(Role.values())
+                .map(Role::name)
+                .collect(Collectors.toSet());
+        for (String key : form.keySet()) {
+            if (roles.contains(key)) {
+                user.getRoles().add(Role.valueOf(key));
+            }
+        }
+        userRepository.save(user);
         return true;
     }
 
@@ -58,11 +70,10 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
     }
 
-    private void setParameters(User user, Map<String, String> form){
+    private void setParameters(User user, Map<String, String> form) {
         Set<String> roles = Arrays.stream(Role.values())
                 .map(Role::name)
                 .collect(Collectors.toSet());
-        System.out.println(user.toString());
         user.getRoles().clear();
         for (String key : form.keySet()) {
             if (!form.get(key).isEmpty()) {
@@ -74,9 +85,9 @@ public class UserService implements UserDetailsService {
                         user.setPassword(passwordEncoder.encode(form.get(key)));
                         break;
                     case ("active"):
-                        if(form.get(key).equals("on")){
+                        if (form.get(key).equals("on")) {
                             user.setActive(true);
-                        }else {
+                        } else {
                             user.setActive(false);
                         }
                         break;
