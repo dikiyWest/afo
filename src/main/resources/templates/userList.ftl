@@ -1,13 +1,15 @@
 <#import "parts/common.ftl" as c>
 <@c.page>
-List of users
 
-<table>
+
+
+<table class="table table-striped">
     <thead>
     <tr>
-        <th>Name</th>
-        <th>Role</th>
-        <th></th>
+        <th>Имя пользователя</th>
+        <th>Роли</th>
+        <th>Дата входа в систему</th>
+        <th>Действие</th>
     </tr>
     </thead>
     <tbody>
@@ -15,7 +17,8 @@ List of users
     <tr>
         <td>${user.username}</td>
         <td><#list user.roles as role>${role}<#sep>, </#list></td>
-        <td><a href="/user/${user.id}">edit</a></td>
+        <td>${user.updatedAt?ifExists}</td>
+        <td><a class="btn btn-outline-info" href="/user/${user.id}">Редактировать/Просмотр</a></td>
     </tr>
     </#list>
     </tbody>

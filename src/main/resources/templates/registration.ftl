@@ -1,9 +1,11 @@
 <#import "parts/common.ftl" as c>
-<#import "parts/login.ftl" as l>
+<#import "parts/userInput.ftl" as l>
 
 <@c.page>
 add new user
 ${message!""}
 
-<@l.login "/registration"/>
+<form action="/registration" method="post">
+<#include "parts/userInput.ftl" />
+    </form>
 </@c.page>
