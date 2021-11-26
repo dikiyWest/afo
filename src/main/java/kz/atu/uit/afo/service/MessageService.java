@@ -21,7 +21,6 @@ public class MessageService {
     public Page<Message> messageList(Pageable pageable, String filter){
         if (filter != null && !filter.isEmpty()) {
             return messageRepository.findByTag(filter,pageable);
-
         } else {
             return messageRepository.findAll(pageable);
         }

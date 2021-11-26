@@ -5,6 +5,8 @@ import kz.atu.uit.afo.domain.Role;
 import kz.atu.uit.afo.domain.User;
 import kz.atu.uit.afo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -43,8 +45,6 @@ public class UserService implements UserDetailsService {
         if (userFromDb != null) {
             return false;
         }
-
-
         user.setRegion(region);
         user.setRoles(new HashSet<>());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -60,9 +60,20 @@ public class UserService implements UserDetailsService {
         return true;
     }
 
-    public List<User> findAll() {
-        return userRepository.findAll();
+    public Page<User> findAll(Pageable pageable, String filter) {
+        if (filter != null && !filter.isEmpty()) {
+            Page<User> user = userRepository.findByIinContaining(filter, pageable);
+            if (user == null || user.isEmpty()) {
+                user = userRepository.findByFioContaining(filter, pageable);
+            }
+            return user;
+        } else {
+            return userRepository.findAll(pageable);
+        }
+
     }
+
+
 
     public void saveUser(User user, String username, Map<String, String> form) {
         user.setUsername(username);

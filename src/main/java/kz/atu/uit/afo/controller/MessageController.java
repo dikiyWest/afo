@@ -105,7 +105,6 @@ public class MessageController {
             Model model,
             @RequestParam(required = false) Message message,
             @PageableDefault(sort = {"id"},direction = Sort.Direction.DESC)Pageable pageable
-
     ) {
         Page<Message> page = messageService.messageListForUser(pageable,currentUser,author);
         model.addAttribute("userChannel", author);

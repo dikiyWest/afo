@@ -28,7 +28,7 @@
                 <#elseif p == -1>
                 <li class="page-item disabled"><a class="page-link">...</a></li>
                 <#else>
-                <li class="page-item"><a class="page-link" href="${url}?page=${p - 1}&size=${page.getSize()}">${p}</a>
+                <li class="page-item"><a class="page-link" href="${url}?page=${p - 1}&size=${page.getSize()}&sort=${pageSort}">${p}</a>
                 </li>
                 </#if>
             </#list>
@@ -45,7 +45,7 @@
                 <#if c == page.getSize()>
                 <li class="page-item active"><a class="page-link" href="#">${page.getSize()}</a></li>
                 <#else>
-                <li class="page-item"><a class="page-link" href="${url}?page=${page.getNumber()}&size=${c}">${c}</a>
+                <li class="page-item"><a class="page-link" href="${url}?page=${page.getNumber()}&size=${c}&sort=${pageSort}">${c}</a>
                 </li>
                 </#if>
             </#list>
