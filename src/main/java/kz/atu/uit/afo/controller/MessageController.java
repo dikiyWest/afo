@@ -54,6 +54,7 @@ public class MessageController {
                        @PageableDefault(sort = {"id"},direction = Sort.Direction.DESC)Pageable pageable) {
         Page<Message> page = messageService.messageList(pageable,filter);
         model.addAttribute("page", page);
+        model.addAttribute("pageSort", page.getSort().toString().replace(": ", ","));
         model.addAttribute("url", "/main");
         model.addAttribute("filter", filter);
         return "main";

@@ -34,8 +34,8 @@ public class UserController {
                            @PageableDefault(sort = {"createdAt"}, direction = Sort.Direction.DESC) Pageable pageable) {
         Page<User> page = userService.findAll(pageable,filter);
         model.addAttribute("page", page);
-        model.addAttribute("pageSort", page.getSort().toString().replace(": ", ","));
-        model.addAttribute("url", "/user");
+        model.addAttribute("pageSort", userService.getSort(page));
+        model.addAttribute("url", userService.setUrl(filter));
         model.addAttribute("filter", filter);
         return "userList";
     }

@@ -25,6 +25,11 @@
                     <a class="nav-link" href="/user">User list</a>
                 </li>
                 </#if>
+                  <#if isAdmin>
+                <li class="nav-item">
+                    <a class="nav-link" href="/enrollee">Поступающие</a>
+                </li>
+                  </#if>
 
             </ul>
             <#if know>

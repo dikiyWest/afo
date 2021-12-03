@@ -50,22 +50,26 @@
     <table class="table table-striped">
         <thead>
         <tr>
-            <th>Имя пользователя</th>
-            <th>Роли</th>
             <th>ФИО</th>
             <th>ИИН</th>
-            <th>Дата входа в систему</th>
+            <th>Учебное заведение</th>
+            <th>Образовательная программа</th>
+            <th>Телефон</th>
+            <th>Email</th>
+            <th>Дата создания</th>
             <th>Действие</th>
         </tr>
         </thead>
         <tbody>
-    <#list page.content as user>
+    <#list page.content as enrollee>
     <tr>
-        <td>${user.username}</td>
-        <td><#list user.roles as role>${role}<#sep>, </#list></td>
-        <td>${user.fio?ifExists}</td>
-        <td>${user.iin?ifExists}</td>
-        <td>${user.updatedAt?ifExists}</td>
+        <td>${enrollee.fio?ifExists}</td>
+        <td>${enrollee.iin?ifExists}</td>
+        <td>${user.university?ifExists}</td>
+        <td>${user.educationProgramm.getNameEducation()?ifExists}</td>
+        <td>${user.phone?ifExists}</td>
+        <td>${user.email?ifExists}</td>
+        <td>${user.phone?ifExists}</td>
         <td><a class="btn btn-outline-info" href="/user/${user.id}">Редактировать/Просмотр</a></td>
     </tr>
     </#list>

@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.naming.NamingException;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -69,6 +70,16 @@ public class UserService implements UserDetailsService {
             return user;
         } else {
             return userRepository.findAll(pageable);
+        }
+
+    }
+
+
+    public String setUrl(String filter) {
+        if (filter != null && !filter.isEmpty()) {
+            return "/user?filter="+filter+"&";
+        } else {
+            return "/user?";
         }
 
     }
@@ -133,5 +144,9 @@ public class UserService implements UserDetailsService {
     public void unsubscribe(User currentUser, User user) {
         user.getSubscribers().remove(currentUser);
         userRepository.save(user);
+    }
+
+    public String  getSort(Page<User> page) {
+        return  page.getSort().toString().replace(": ", ",");
     }
 }
