@@ -55,4 +55,15 @@ public class EnrolleeService {
             return true;
         }
     }
+
+    public boolean enrolleeAdd(Enrollee enrollee, Region region, EducationProgramm educationProgramm) {
+        if(checkIIN(enrollee.getIin())){
+           return false;
+        }
+        System.out.println(enrollee.toString());
+        enrollee.setRegion(region);
+        enrollee.setEducationProgramm(educationProgramm);
+        enrolleeRepository.save(enrollee);
+        return true;
+    }
 }

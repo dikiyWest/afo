@@ -2,7 +2,7 @@ package kz.atu.uit.afo.controller;
 
 import kz.atu.uit.afo.domain.EducationProgramm;
 import kz.atu.uit.afo.domain.Enrollee;
-import kz.atu.uit.afo.repository.EnrolleeRepository;
+import kz.atu.uit.afo.domain.Region;
 import kz.atu.uit.afo.service.EnrolleeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -11,12 +11,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import javax.validation.Valid;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/enrollee")
@@ -62,9 +57,19 @@ public class EnrolleeController {
             }
         }
         return "enrolleeAdd";
-
     }
-
+    @PostMapping(value = "/saveEnrollee")
+    public String saveEnrollee(
+            @RequestBody Enrollee enrollee,
+            @RequestParam("region") Region region,
+            @RequestParam("educationProgramm")EducationProgramm educationProgramm
+            ){
+        System.out.println(enrollee.toString());
+        if(!enrolleeService.enrolleeAdd(enrollee,region,educationProgramm)){
+            return "redirect:/enrolleeAdd";
+        }
+        return "redirect:/enrollee";
+    }
 
 
 }

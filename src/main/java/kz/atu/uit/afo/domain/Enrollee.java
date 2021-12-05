@@ -136,4 +136,21 @@ public class Enrollee {
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
+
+    @Override
+    public String toString() {
+        return "Enrollee{" +
+                "id=" + id +
+                ", careerСounselor=" + careerСounselor +
+                ", fio='" + fio + '\'' +
+                ", iin='" + iin + '\'' +
+                ", phone='" + phone + '\'' +
+                ", university='" + university + '\'' +
+                ", email='" + email + '\'' +
+                ", region=" + region +
+                ", educationProgramm=" + educationProgramm +
+                ", note='" + note + '\'' +
+                ", createdAt=" + createdAt +
+                '}';
+    }
 }

@@ -31,4 +31,12 @@ public class Region {
     public void setNameRegion(String nameRegion) {
         this.nameRegion = nameRegion;
     }
+
+    @Override
+    public String toString() {
+        return "Region{" +
+                "id=" + id +
+                ", nameRegion='" + nameRegion + '\'' +
+                '}';
+    }
 }
