@@ -39,13 +39,30 @@ public class EnrolleeController {
         return "enrolleeList";
     }
 
-    @GetMapping("addEnrollee")
+    @GetMapping("enrolleeAdd/{check}")
     public String addEnrollee(
-            Model model
+            Model model,
+            @RequestParam(required = false,defaultValue = "") String iin,
+            @PathVariable String check
     ){
-        model.addAttribute("educationProgramms",enrolleeService.getEducationProgramms());
-        model.addAttribute("regions",enrolleeService.getRegions());
+        if("stay".equals(check)){
+            model.addAttribute("check",check);
+        } else {
+            if (enrolleeService.checkIIN(iin)){
+                check = "checking";
+                model.addAttribute("error", "Поступающий уже соществует");
+                model.addAttribute("check", check);
+            } else{
+                check = "next";
+                model.addAttribute("iin", iin);
+                model.addAttribute("error", null);
+                model.addAttribute("educationProgramms", enrolleeService.getEducationProgramms());
+                model.addAttribute("regions", enrolleeService.getRegions());
+                model.addAttribute("check", check);
+            }
+        }
         return "enrolleeAdd";
+
     }
 
 

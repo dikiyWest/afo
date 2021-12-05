@@ -2,7 +2,7 @@
 <#import "parts/pager.ftl" as p>
 <@c.page>
 
-<a class="btn btn-primary mb-3" href="/registration">Новый пользователь</a>
+<a class="btn btn-primary mb-3" href="/enrollee/enrolleeAdd/stay">Новый пользователь</a>
 <div class="container">
     <div class="row mt-2">
         <div class="col-10">

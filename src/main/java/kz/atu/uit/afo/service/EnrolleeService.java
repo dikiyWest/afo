@@ -9,6 +9,7 @@ import kz.atu.uit.afo.repository.RegionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -46,4 +47,12 @@ public class EnrolleeService {
     }
 
 
+    public boolean checkIIN(String iin) {
+       Enrollee  enrollee =  enrolleeRepository.findByIin(iin);
+        if (enrollee == null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 }
