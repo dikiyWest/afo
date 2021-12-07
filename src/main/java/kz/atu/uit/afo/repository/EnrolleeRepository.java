@@ -9,6 +9,7 @@ public interface EnrolleeRepository extends JpaRepository<Enrollee,Long> {
     Enrollee findByIin(String iin);
     Page<Enrollee> findAll(Pageable pageable);
 
+
     Page<Enrollee> findByIinContaining(String filter, Pageable pageable);
     Page<Enrollee> findByFioContaining(String filter, Pageable pageable);
 }

@@ -1,11 +1,13 @@
 package kz.atu.uit.afo.domain;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 public class Enrollee {
@@ -45,6 +47,8 @@ public class Enrollee {
 
     @CreationTimestamp
     private LocalDateTime createdAt;
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 
     public Enrollee() {
     }
@@ -130,11 +134,28 @@ public class Enrollee {
     }
 
     public LocalDateTime getCreatedAt() {
+
         return createdAt;
     }
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public String getFormatCreatedAt(){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yy HH:mm");
+        if (createdAt!=null){
+            return formatter.format(createdAt);
+        }
+        return "";
     }
 
     @Override

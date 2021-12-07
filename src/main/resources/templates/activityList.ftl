@@ -2,15 +2,15 @@
 <#import "parts/pager.ftl" as p>
 <@c.page>
 
-<a class="btn btn-primary mb-3" href="/enrollee/enrolleeAdd/stay">Добавить</a>
+<a class="btn btn-primary mb-3" href="/activity/activityAdd">Добавить</a>
 <div class="container">
     <div class="row mt-2">
         <div class="col-10">
-            <form method="get" action="/enrollee" class="row row-cols-lg-auto g-3 align-items-center">
+            <form method="get" action="/activity" class="row row-cols-lg-auto g-3 align-items-center">
                 <div class="form-group col-md-7">
                     <div class="input-group">
                         <input class="form-control" type="text" name="filter" value="${filter?ifExists}"
-                               placeholder="Поиск по ИИН/ФИО">
+                               placeholder="Поиск по мероприятию">
                     </div>
                 </div>
                 <div>
@@ -36,27 +36,23 @@
     <table class="table table-striped">
         <thead>
         <tr>
-            <th>ФИО</th>
-            <th>ИИН</th>
+            <th>Дата и время мероприятия</th>
+            <th>Наименование мероприятия</th>
+            <th>Формат</th>
             <th>Учебное заведение</th>
-            <th>Образовательная программа</th>
-            <th>Телефон</th>
-            <th>Email</th>
-            <th>Дата создания</th>
+            <th>Регион</th>
             <th>Действие</th>
         </tr>
         </thead>
         <tbody>
-    <#list page.content as enrollee>
+    <#list page.content as activity>
     <tr>
-        <td>${enrollee.fio?ifExists}</td>
-        <td>${enrollee.iin?ifExists}</td>
-        <td>${enrollee.university?ifExists}</td>
-        <td>${enrollee.educationProgramm.getNameEducation()?ifExists}</td>
-        <td>${enrollee.phone?ifExists}</td>
-        <td>${enrollee.email?ifExists}</td>
-        <td>${enrollee.getFormatCreatedAt()?ifExists}</td>
-        <td><a class="btn btn-outline-info" href="/enrollee/${enrollee.id}">Редактировать</a></td>
+        <td>${activity.dateActivity?ifExists}</td>
+        <td>${activity.nameActivity?ifExists}</td>
+        <td>${activity.formatActivity?ifExists}</td>
+        <td>${activity.placeActivity?ifExists}</td>
+        <td>${activity.region.nameRegion?ifExists}</td>
+        <td><a class="btn btn-outline-info" href="/activity/${activity.id}">Редактировать</a></td>
     </tr>
     </#list>
         </tbody>

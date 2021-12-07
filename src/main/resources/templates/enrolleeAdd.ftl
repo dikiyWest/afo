@@ -9,7 +9,7 @@
     <button class="btn btn-primary mt-3" type="submit">Проверить</button>
 </form>
     <#else>
-<form action="/enrollee/saveEnrollee" method="post">
+<form action="/enrollee" method="post">
     <div class="mb-3">
         <label class="form-label"> ИИН : </label>
         <input class="form-control" type="text" name="iin"
@@ -25,7 +25,10 @@
     </div>
     <div class="mb-3">
         <label class="form-label"> Телефон : </label>
-        <input class="form-control" type="text" name="phone" value="<#if enrollee??>${enrollee.phone!""}</#if>">
+        <div class="input-group mb-3">
+        <span class="input-group-text" id="basic-addon1">+7</span>
+        <input class="form-control" aria-describedby="basic-addon1" type="text" name="phone" value="<#if enrollee??>${enrollee.phone!""}</#if>">
+        </div>
     </div>
     <div class="mb-3">
         <label class="form-label"> Учебное заведение : </label>
@@ -46,10 +49,9 @@
     </select>
     <div class="mb-3">
         <label class="form-label"> Примечание : </label>
-        <textarea class="form-control" aria-label="Примечание" name="note"
-                  value="<#if enrollee??>${enrollee.note!""}</#if>"></textarea>
+        <textarea class="form-control" aria-label="Примечание" name="note"><#if enrollee??>${enrollee.note!""}</#if></textarea>
     </div>
-
+    <input type="hidden" name="_csrf" value="${_csrf.token}"/>
 <#if enrollee??><#if enrollee.id??> <input type="hidden" value="${enrollee.id}" name="enrolleeId"></#if></#if>
     <button class="btn btn-primary mt-3" type="submit">Save</button>
 </form>
