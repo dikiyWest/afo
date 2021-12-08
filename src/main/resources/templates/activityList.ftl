@@ -19,16 +19,16 @@
         </div>
         </form>
         <div class="col">
-            <form method="get" action="/enrollee" class="row row-cols-lg-auto g-3 align-items-center">
+            <form method="get" action="/activity" class="row row-cols-lg-auto g-3 align-items-center">
                 <select class="form-select bg-size" name="sort" id="sort" onchange="this.form.submit()">
                     <option value="createdAt,DESC" <#if pageSort == "createdAt,DESC">selected</#if>>Дата создания по убыванию</option>
                     <option value="createdAt,ASC" <#if pageSort=="createdAt,ASC">selected</#if>>Дата создания по возрастанию</option>
-                    <option value="fio,DESC" <#if pageSort=="fio,DESC">selected</#if>>ФИО по убыванию</option>
-                    <option value="fio,ASC" <#if pageSort=="fio,ASC">selected</#if>>ФИО по возрастанию</option>
+                    <option value="dateActivity,DESC" <#if pageSort=="dateActivity,DESC">selected</#if>>Дата мероприятия по убыванию</option>
+                    <option value="dateActivity,ASC" <#if pageSort=="dateActivity,ASC">selected</#if>>Дата мероприятия по возрастанию</option>
                     <option value="updatedAt,DESC" <#if pageSort=="updatedAt,DESC">selected</#if>>Дата изменения по убыванию</option>
                     <option value="updatedAt,ASC" <#if pageSort=="updatedAt,ASC">selected</#if>>Дата изменения по возрастанию</option>
-                    <option value="iin,DESC" <#if pageSort=="iin,DESC">selected</#if>>ИИН по убыванию</option>
-                    <option value="iin,ASC" <#if pageSort=="iin,ASC">selected</#if>>ИИН по возрастанию</option>
+                    <option value="nameActivity,DESC" <#if pageSort=="nameActivity,DESC">selected</#if>>Наименование по убыванию</option>
+                    <option value="nameActivity,ASC" <#if pageSort=="nameActivity,ASC">selected</#if>>Наименование по возрастанию</option>
                 </select>
             </form>
         </div>
@@ -41,6 +41,7 @@
             <th>Формат</th>
             <th>Учебное заведение</th>
             <th>Регион</th>
+            <th>Документы</th>
             <th>Действие</th>
         </tr>
         </thead>
@@ -52,6 +53,7 @@
         <td>${activity.formatActivity?ifExists}</td>
         <td>${activity.placeActivity?ifExists}</td>
         <td>${activity.region.nameRegion?ifExists}</td>
+        <td><a class="btn btn-outline-secondary" href="/zip/${activity.getFileName()?ifExists}" target="_blank">Скачать</a> </td>
         <td><a class="btn btn-outline-info" href="/activity/${activity.id}">Редактировать</a></td>
     </tr>
     </#list>

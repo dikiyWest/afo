@@ -13,10 +13,11 @@ public class Activity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    private User author;
 
     private LocalDateTime dateActivity;
-
-    private LocalTime timeActivity;
 
     private String nameActivity;
 
@@ -56,14 +57,6 @@ public class Activity {
 
     public void setDateActivity(LocalDateTime dateActivity) {
         this.dateActivity = dateActivity;
-    }
-
-    public LocalTime getTimeActivity() {
-        return timeActivity;
-    }
-
-    public void setTimeActivity(LocalTime timeActivity) {
-        this.timeActivity = timeActivity;
     }
 
     public String getNameActivity() {
@@ -130,5 +123,28 @@ public class Activity {
         this.updatedAt = updatedAt;
     }
 
+    public User getAuthor() {
+        return author;
+    }
 
+    public void setAuthor(User author) {
+        this.author = author;
+    }
+
+    @Override
+    public String toString() {
+        return "Activity{" +
+                "id=" + id +
+                ", author=" + author +
+                ", dateActivity=" + dateActivity +
+                ", nameActivity='" + nameActivity + '\'' +
+                ", formatActivity='" + formatActivity + '\'' +
+                ", placeActivity='" + placeActivity + '\'' +
+                ", region=" + region +
+                ", countPeople=" + countPeople +
+                ", fileName='" + fileName + '\'' +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                '}';
+    }
 }
