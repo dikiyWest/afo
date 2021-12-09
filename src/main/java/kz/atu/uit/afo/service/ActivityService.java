@@ -60,7 +60,6 @@ public class ActivityService {
 
     public boolean activitySave(Activity activity, User user, Long activityId, String dateActivity, String timeActivity,MultipartFile file) {
     if(activity.getId()==null && activityId == null){
-        System.out.println(timeActivity);
         setDateActivity(activity,dateActivity,timeActivity);
         activity.setAuthor(user);
         activityRepository.save(activity);
