@@ -7,6 +7,7 @@ import org.hibernate.validator.constraints.Length;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 public class Contact {
@@ -26,9 +27,11 @@ public class Contact {
     private String iin;
 
     private String placeOfWork;
+    private String position;
 
 
-    private String phone;
+    private String phoneMobile;
+    private String phoneCity;
 
     @Email
     private String email;
@@ -91,12 +94,20 @@ public class Contact {
         this.placeOfWork = placeOfWork;
     }
 
-    public String getPhone() {
-        return phone;
+    public String getPhoneMobile() {
+        return phoneMobile;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setPhoneMobile(String phoneMobile) {
+        this.phoneMobile = phoneMobile;
+    }
+
+    public String getPhoneCity() {
+        return phoneCity;
+    }
+
+    public void setPhoneCity(String phoneCity) {
+        this.phoneCity = phoneCity;
     }
 
     public String getEmail() {
@@ -145,5 +156,20 @@ public class Contact {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
+    }
+    public String getFormatCreatedAt(){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yy HH:mm");
+        if (createdAt!=null){
+            return formatter.format(createdAt);
+        }
+        return "";
     }
 }

@@ -35,6 +35,11 @@
                     <a class="nav-link" href="/activity">Мероприятия</a>
                 </li>
                   </#if>
+                   <#if isAdmin>
+                <li class="nav-item">
+                    <a class="nav-link" href="/contact">Контакты</a>
+                </li>
+                   </#if>
 
             </ul>
             <#if know>
