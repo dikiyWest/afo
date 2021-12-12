@@ -1,5 +1,6 @@
 package kz.atu.uit.afo.domain;
 
+import kz.atu.uit.afo.domain.util.DomainHelper;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.Length;
@@ -10,7 +11,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Entity
-public class Enrollee {
+public class Enrollee implements DomainHelper {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -173,5 +174,15 @@ public class Enrollee {
                 ", note='" + note + '\'' +
                 ", createdAt=" + createdAt +
                 '}';
+    }
+
+    @Override
+    public Long getIdFromHelper() {
+        return id;
+    }
+
+    @Override
+    public String getNameFromHelper() {
+        return fio;
     }
 }

@@ -26,11 +26,11 @@ public class ActivityService {
 
     public Page<Activity> findAll(Pageable pageable, String filter) {
         if (filter != null && !filter.isEmpty()) {
-            Page<Activity> enrollees = activityRepository.findByNameActivityContaining(filter, pageable);
-            if (enrollees == null || enrollees.isEmpty()) {
+            Page<Activity> activitys = activityRepository.findByNameActivityContaining(filter, pageable);
+            if (activitys == null || activitys.isEmpty()) {
                     return activityRepository.findAll(pageable);
             }else {
-                return enrollees;
+                return activitys;
             }
         } else {
             return activityRepository.findAll(pageable);

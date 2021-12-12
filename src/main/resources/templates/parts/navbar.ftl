@@ -40,6 +40,11 @@
                     <a class="nav-link" href="/contact">Контакты</a>
                 </li>
                    </#if>
+                   <#if isAdmin>
+                <li class="nav-item">
+                    <a class="nav-link" href="/task">Задачи</a>
+                </li>
+                   </#if>
 
             </ul>
             <#if know>

@@ -1,5 +1,6 @@
 package kz.atu.uit.afo.domain;
 
+import kz.atu.uit.afo.domain.util.DomainHelper;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -8,7 +9,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Entity
-public class Activity {
+public class Activity implements DomainHelper {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -131,6 +132,8 @@ public class Activity {
         this.author = author;
     }
 
+
+
     @Override
     public String toString() {
         return "Activity{" +
@@ -146,5 +149,15 @@ public class Activity {
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 '}';
+    }
+
+    @Override
+    public Long getIdFromHelper() {
+        return id;
+    }
+
+    @Override
+    public String getNameFromHelper() {
+        return nameActivity;
     }
 }
