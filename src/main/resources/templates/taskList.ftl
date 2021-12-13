@@ -56,8 +56,8 @@
         <tbody>
     <#list page.content as task>
     <tr>
-        <td>${task.datetask?ifExists}</td>
-        <td>${task.nametask?ifExists}</td>
+        <td>${task.dateTask?ifExists}</td>
+        <td>${task.nameTask?ifExists}</td>
         <td>${task.description?ifExists}</td>
         <td> <#if task??>
             <#if task.activity??>

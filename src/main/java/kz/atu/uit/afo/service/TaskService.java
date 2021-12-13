@@ -1,7 +1,6 @@
 package kz.atu.uit.afo.service;
 
-import kz.atu.uit.afo.domain.Contact;
-import kz.atu.uit.afo.domain.Task;
+import kz.atu.uit.afo.domain.*;
 import kz.atu.uit.afo.domain.util.DomainHelper;
 import kz.atu.uit.afo.repository.ActivityRepository;
 import kz.atu.uit.afo.repository.ContactRepository;
@@ -12,7 +11,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
@@ -57,18 +58,62 @@ public class TaskService {
         }
     }
 
-    public List<DomainHelper> getTypeList(String type) {
+    public Iterable<? extends DomainHelper> getTypeList(String type) {
         if(type.equals("activity"))
-            return activityRepository.findAll();
+            return (Iterable<Activity>)activityRepository.findAll();
         if(type.equals("contact"))
-            return contactRepository.findAll();
+            return (Iterable<Contact>)contactRepository.findAll();
         if(type.equals("enrollee"))
-            return Collections.singletonList(enrolleeRepository.findAll());
+            return (Iterable<Enrollee>)enrolleeRepository.findAll();
         return null;
     }
 
     public String getNowDateFormat(){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         return formatter.format(LocalDateTime.now());
+    }
+
+    public boolean taskSave(Task task, User user, Long taskId, String dateValueTask, String timeValueTask) {
+        if(task.getId()==null && taskId == null){
+            setDateActivity(task,dateValueTask,timeValueTask);
+            task.setCareerСounselor(user);
+            taskRepository.save(task);
+            return true;
+        }else {
+            Task taskFromDb = taskRepository.getById(taskId);
+            if(checkDateChange(taskFromDb.getDateTask(),dateValueTask,timeValueTask)){
+                setDateActivity(task,dateValueTask,timeValueTask);
+            }else {
+                task.setDateTask(taskFromDb.getDateTask());
+            }
+            task.setId(taskFromDb.getId());
+            task.setCreatedAt(taskFromDb.getCreatedAt());
+            task.setCareerСounselor(taskFromDb.getCareerСounselor());
+            taskRepository.save(task);
+            return true;
+        }
+    }
+
+    private void setDateActivity(Task task,String dateActivity,String timeActivity){
+        if(dateActivity != null && timeActivity != null){
+            LocalDate datePart = LocalDate.parse(dateActivity);
+            LocalTime timePart = LocalTime.parse(timeActivity);
+            task.setDateTask(LocalDateTime.of(datePart, timePart));
+        }
+    }
+
+    private boolean checkDateChange(LocalDateTime dateTimeActivity,String dateActivity, String timeActivity ){
+        if(dateActivity != null && timeActivity != null) {
+            LocalDate datePart = LocalDate.parse(dateActivity);
+            LocalTime timePart = LocalTime.parse(timeActivity);
+            if ((!datePart.equals(dateTimeActivity.toLocalDate()) || datePart != dateTimeActivity.toLocalDate()) ||
+                    !timePart.equals(dateTimeActivity.toLocalTime())){
+                if(timeActivity.equals("00:00")){
+                    return false;
+                }
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -23,10 +23,10 @@
                   name="description"><#if task??>${task.description!""}</#if></textarea>
     </div>
 
-    <label class="form-label"> Регион : </label>
+    <label class="form-label"> Назначение задачи  : </label>
     <select class="form-select" name="${type}" id="${type}">
     <#list typeList as object>
-        <option value="${object.id}" <#if task??><#if task.getType("${type}")?? && task.getType("${type}")==object>selected</#if></#if>> ${object.getName()?if_exists}</option>
+        <option value="${object.getIdFromHelper()}" <#if task??><#if task.getType("${type}")?? && task.getType("${type}")==object>selected</#if></#if>> ${object.getNameFromHelper()?if_exists}</option>
     </#list>
     </select>
     <input type="hidden" name="_csrf" value="${_csrf.token}"/>
