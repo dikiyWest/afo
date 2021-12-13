@@ -61,11 +61,11 @@
         <td>${task.description?ifExists}</td>
         <td> <#if task??>
             <#if task.activity??>
-            <a class="btn btn-outline-secondary" href="/task/activity/${task.id}">Задача по мероприятию</a>
+            <a class="btn btn-outline-secondary" href="/task/activity/${task.id}">Задача по мероприятию/Просмотреть</a>
         <#elseIf task.contact??>
-         <a class="btn btn-outline-secondary" href="/task/contact/${task.id}">Задача по контакту</a>
+         <a class="btn btn-outline-secondary" href="/task/contact/${task.id}">Задача по контакту/Просмотреть</a>
         <#elseIf task.enrollee??>
-        <a class="btn btn-outline-secondary" href="/task/enrollee/${task.id}">Задача по поступающему</a>
+        <a class="btn btn-outline-secondary" href="/task/enrollee/${task.id}">Задача по поступающему/Просмотреть</a>
         </#if>
         </#if>
         </td>

@@ -39,6 +39,11 @@ public class TaskController {
         return "taskList";
     }
 
+    @GetMapping("{type}/{task}")
+    public String viewType(){
+
+    }
+
     @GetMapping("{type}/taskAdd")
     public String addTask(
             @PathVariable String type,
@@ -64,4 +69,6 @@ public class TaskController {
 
         return "redirect:/task";
     }
+
+
 }
