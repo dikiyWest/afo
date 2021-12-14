@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -36,12 +37,33 @@ public class TaskController {
         model.addAttribute("pageSort", taskService.getSort(page));
         model.addAttribute("url", taskService.setUrl(filter));
         model.addAttribute("filter", filter);
+        model.addAttribute("nowLocalDateTime", LocalDateTime.now());
         return "taskList";
     }
 
     @GetMapping("{type}/{task}")
-    public String viewType(){
+    public String viewType(
+            @PathVariable Task task,
+            @PathVariable String type,
+            Model model
+    ){
+        model.addAttribute("type", type);
+        model.addAttribute("task",task);
+        model.addAttribute("minDate", taskService.getNowDateFormat());
+        model.addAttribute("typeList", taskService.getTypeList(type));
+        return "viewType";
+    }
 
+    @GetMapping("{task}")
+    public String editTask(
+            @PathVariable Task task,
+            Model model
+    ){
+        model.addAttribute("type", taskService.getType(task));
+        model.addAttribute("task",task);
+        model.addAttribute("minDate", taskService.getNowDateFormat());
+        model.addAttribute("typeList", taskService.getTypeList(taskService.getType(task)));
+        return "taskAdd";
     }
 
     @GetMapping("{type}/taskAdd")

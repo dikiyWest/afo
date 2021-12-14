@@ -1,7 +1,7 @@
+
 <#import "parts/common.ftl" as c>
 <#import "parts/pager.ftl" as p>
 <@c.page>
-
 <div class="dropdown mb-3">
     <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButtonTask" data-bs-toggle="dropdown" aria-expanded="false">
         Добавить
@@ -33,12 +33,12 @@
                 <select class="form-select bg-size" name="sort" id="sort" onchange="this.form.submit()">
                     <option value="createdAt,DESC" <#if pageSort == "createdAt,DESC">selected</#if>>Дата создания по убыванию</option>
                     <option value="createdAt,ASC" <#if pageSort=="createdAt,ASC">selected</#if>>Дата создания по возрастанию</option>
-                    <option value="datetask,DESC" <#if pageSort=="datetask,DESC">selected</#if>>Дата мероприятия по убыванию</option>
-                    <option value="datetask,ASC" <#if pageSort=="datetask,ASC">selected</#if>>Дата мероприятия по возрастанию</option>
+                    <option value="dateTask,DESC" <#if pageSort=="datetask,DESC">selected</#if>>Дата задачи по убыванию</option>
+                    <option value="dateTask,ASC" <#if pageSort=="datetask,ASC">selected</#if>>Дата задачи по возрастанию</option>
                     <option value="updatedAt,DESC" <#if pageSort=="updatedAt,DESC">selected</#if>>Дата изменения по убыванию</option>
                     <option value="updatedAt,ASC" <#if pageSort=="updatedAt,ASC">selected</#if>>Дата изменения по возрастанию</option>
-                    <option value="nametask,DESC" <#if pageSort=="nametask,DESC">selected</#if>>Наименование по убыванию</option>
-                    <option value="nametask,ASC" <#if pageSort=="nametask,ASC">selected</#if>>Наименование по возрастанию</option>
+                    <option value="nameTask,DESC" <#if pageSort=="nametask,DESC">selected</#if>>Наименование по убыванию</option>
+                    <option value="nameTask,ASC" <#if pageSort=="nametask,ASC">selected</#if>>Наименование по возрастанию</option>
                 </select>
             </form>
         </div>
@@ -55,7 +55,8 @@
         </thead>
         <tbody>
     <#list page.content as task>
-    <tr>
+
+    <tr <#if task.dateTask.isBefore(nowLocalDateTime)> class="table-danger" </#if>>
         <td>${task.dateTask?ifExists}</td>
         <td>${task.nameTask?ifExists}</td>
         <td>${task.description?ifExists}</td>

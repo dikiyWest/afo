@@ -116,4 +116,14 @@ public class TaskService {
         }
         return false;
     }
+
+    public String getType(Task task) {
+        if(task.getActivity() != null)
+            return "activity";
+        if(task.getContact()!= null)
+            return "contact";
+        if(task.getEnrollee()!=null)
+            return "enrollee";
+        return "";
+    }
 }
