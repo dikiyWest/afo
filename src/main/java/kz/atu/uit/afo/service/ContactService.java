@@ -5,10 +5,22 @@ import kz.atu.uit.afo.domain.Region;
 import kz.atu.uit.afo.domain.User;
 import kz.atu.uit.afo.repository.ContactRepository;
 import kz.atu.uit.afo.repository.RegionRepository;
+import kz.atu.uit.afo.service.reportService.ContactExcelReporter;
+import kz.atu.uit.afo.service.reportService.UserExcelReporter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.Date;
+import java.util.List;
 
 @Service
 public class ContactService {
@@ -27,8 +39,8 @@ public class ContactService {
                 if (contacts == null || contacts.isEmpty()) {
                     return contactRepository.findAll(pageable);
                 }
-                return  contacts;
-            }else {
+                return contacts;
+            } else {
                 return contacts;
             }
         } else {
@@ -83,4 +95,41 @@ public class ContactService {
         return true;
     }
 
+    public void getReportExcel(String dateMin, String dateMax, HttpServletResponse response, User user) throws IOException {
+        List<Contact> contactList;
+        LocalDate datePartMax;
+
+        response.setContentType("application/octet-stream");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String currentDateTime = dateFormatter.format(new Date());
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=contact_" + currentDateTime + ".xlsx";
+        response.setHeader(headerKey, headerValue);
+
+        LocalTime time = LocalTime.parse("00:00:00");
+
+        if (dateMin.equals("") && dateMax.equals("") && user == null) {
+            contactList = contactRepository.findAll();
+        } else if(dateMin.equals("") && dateMax.equals("") && user != null){
+            contactList = contactRepository.findByCareerСounselor(user);
+        }else {
+            if (dateMax.equals("") || dateMax == null) {
+                datePartMax = LocalDate.now();
+            } else {
+                datePartMax = LocalDate.parse(dateMax);
+            }
+
+            if (user == null) {
+                LocalDate datePartMin = LocalDate.parse(dateMin);
+                contactList = contactRepository.findByCreatedAtBetween(LocalDateTime.of(datePartMin, time), LocalDateTime.of(datePartMax, time));
+            } else {
+                LocalDate datePartMin = LocalDate.parse(dateMin);
+                contactList = contactRepository.findByCreatedAtBetweenAndCareerСounselor(LocalDateTime.of(datePartMin, time), LocalDateTime.of(datePartMax, time), user);
+            }
+        }
+
+
+        ContactExcelReporter excelExporter = new ContactExcelReporter(contactList);
+        excelExporter.export(response);
+    }
 }

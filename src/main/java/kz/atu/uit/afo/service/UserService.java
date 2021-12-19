@@ -4,6 +4,7 @@ import kz.atu.uit.afo.domain.Region;
 import kz.atu.uit.afo.domain.Role;
 import kz.atu.uit.afo.domain.User;
 import kz.atu.uit.afo.repository.UserRepository;
+import kz.atu.uit.afo.service.reportService.UserExcelReporter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,7 +15,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.naming.NamingException;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.lang.reflect.Method;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -72,6 +80,10 @@ public class UserService implements UserDetailsService {
             return userRepository.findAll(pageable);
         }
 
+    }
+
+    public List<User> findAll(){
+       return userRepository.findAll();
     }
 
 
@@ -148,5 +160,37 @@ public class UserService implements UserDetailsService {
 
     public String  getSort(Page<User> page) {
         return  page.getSort().toString().replace(": ", ",");
+    }
+
+    public void getReportExcel(String dateMin, String dateMax, HttpServletResponse response) throws IOException {
+        List<User> listUsers;
+        LocalDate datePartMax;
+
+        response.setContentType("application/octet-stream");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String currentDateTime = dateFormatter.format(new Date());
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=users_" + currentDateTime + ".xlsx";
+        response.setHeader(headerKey, headerValue);
+
+        LocalTime time = LocalTime.parse("00:00:00");
+
+        if(dateMin.equals("") && dateMax.equals(""))
+        {
+            listUsers = userRepository.findAll();
+
+        } else {
+            if(dateMax.equals("") || dateMax == null){
+                datePartMax = LocalDate.now();
+            } else{
+                datePartMax = LocalDate.parse(dateMax);
+            }
+            LocalDate datePartMin = LocalDate.parse(dateMin);
+            listUsers = userRepository.findByCreatedAtBetween(LocalDateTime.of(datePartMin,time),LocalDateTime.of(datePartMax,time));
+        }
+
+
+        UserExcelReporter excelExporter = new UserExcelReporter(listUsers);
+        excelExporter.export(response);
     }
 }

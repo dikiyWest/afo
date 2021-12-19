@@ -37,6 +37,7 @@ public class User implements UserDetails {
     private String email;
     private String placeOfWork;
 
+
     @CreationTimestamp
     private LocalDateTime createdAt;
 

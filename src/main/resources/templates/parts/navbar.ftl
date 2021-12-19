@@ -45,6 +45,18 @@
                     <a class="nav-link" href="/task">Задачи</a>
                 </li>
                    </#if>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Отчеты
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="/report/user">Отчет по пользователю</a></li>
+                        <li><a class="dropdown-item" href="/report/enrollee">Отчет по поступающему</a></li>
+                        <li><a class="dropdown-item" href="/report/activity">Отчет по мероприятиям</a></li>
+                        <li><a class="dropdown-item" href="/report/contact">Отчет по контактам</a></li>
+
+                    </ul>
+                </li>
 
             </ul>
             <#if know>
