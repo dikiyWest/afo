@@ -31,7 +31,9 @@ public class ContactService {
     @Autowired
     private RegionRepository regionRepository;
 
-    public Page<Contact> findAll(Pageable pageable, String filter) {
+
+    public Page<Contact> findAll(User user, Pageable pageable, String filter) {
+
         if (filter != null && !filter.isEmpty()) {
             Page<Contact> contacts = contactRepository.findByIinContaining(filter, pageable);
             if (contacts == null || contacts.isEmpty()) {
@@ -110,9 +112,9 @@ public class ContactService {
 
         if (dateMin.equals("") && dateMax.equals("") && user == null) {
             contactList = contactRepository.findAll();
-        } else if(dateMin.equals("") && dateMax.equals("") && user != null){
+        } else if (dateMin.equals("") && dateMax.equals("") && user != null) {
             contactList = contactRepository.findByCareerСounselor(user);
-        }else {
+        } else {
             if (dateMax.equals("") || dateMax == null) {
                 datePartMax = LocalDate.now();
             } else {
@@ -131,5 +133,9 @@ public class ContactService {
 
         ContactExcelReporter excelExporter = new ContactExcelReporter(contactList);
         excelExporter.export(response);
+    }
+
+    private boolean isAdmin(User user) {
+        return user.getRoles().contains("ADMIN");
     }
 }
