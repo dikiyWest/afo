@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.security.Principal;
 
+import static org.springframework.security.authorization.AuthorityAuthorizationManager.hasRole;
+
 @Controller
 @RequestMapping("/contact")
 public class ContactController {
@@ -30,9 +32,6 @@ public class ContactController {
             @PageableDefault(sort = {"createdAt"},direction = Sort.Direction.DESC)Pageable pageable,
             Principal principal
             ){
-        System.out.println(principal.getName());
-
-        System.out.println(user.getUsername());
         Page<Contact> page = contactService.findAll(user,pageable,filter);
         model.addAttribute("page",page);
         model.addAttribute("pageSort", contactService.getSort(page));

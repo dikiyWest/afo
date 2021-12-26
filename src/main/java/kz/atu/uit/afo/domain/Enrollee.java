@@ -20,6 +20,7 @@ public class Enrollee implements DomainHelper {
     @JoinColumn(name = "user_id")
     private User careerСounselor;
 
+
     private String fio;
 
 

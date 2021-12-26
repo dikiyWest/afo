@@ -12,11 +12,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface ContactRepository extends JpaRepository<Contact,Long> {
-    @PreAuthorize("hasAuthority('ADMIN')")
+
     Contact findByIin(String iin);
 
 
-    @Query("select c from Contact c  where 1 = ?#{ ('ROLE_ADMIN') ? 1 : 0}")
+    @Query("select c from Contact c  where 1 = ?#{hasAnyAuthority('ADMIN','Профориентатор')? 1:0} or c.careerСounselor.username = ?#{principal.username}")
     Page<Contact> findAll(Pageable pageable);
 
     Page<Contact> findByActveAndCareerСounselor(Boolean active,User user,Pageable pageable);
@@ -26,8 +26,6 @@ public interface ContactRepository extends JpaRepository<Contact,Long> {
     Page<Contact> findByIinContaining(String filter, Pageable pageable);
     Page<Contact> findByFioContaining(String filter, Pageable pageable);
 
-    Page<Contact> findByIinContainingAndCareerСounselor(String filter,User user, Pageable pageable);
-    Page<Contact> findByFioContainingAndCareerСounselor(String filter,User user, Pageable pageable);
 
     List<Contact> findByCreatedAtBetween(LocalDateTime of, LocalDateTime of1);
 
