@@ -82,20 +82,19 @@ public class UserService implements UserDetailsService {
 
     }
 
-    public List<User> findAll(){
-       return userRepository.findAll();
+    public List<User> findAll() {
+        return userRepository.findAll();
     }
 
 
     public String setUrl(String filter) {
         if (filter != null && !filter.isEmpty()) {
-            return "/user?filter="+filter+"&";
+            return "/user?filter=" + filter + "&";
         } else {
             return "/user?";
         }
 
     }
-
 
 
     public void saveUser(User user, String username, Map<String, String> form) {
@@ -117,13 +116,6 @@ public class UserService implements UserDetailsService {
                 switch (key) {
                     case ("password"):
                         user.setPassword(passwordEncoder.encode(form.get(key)));
-                        break;
-                    case ("active"):
-                        if (form.get(key).equals("on")) {
-                            user.setActive(true);
-                        } else {
-                            user.setActive(false);
-                        }
                         break;
                     case ("fio"):
                         user.setFio(form.get(key));
@@ -158,8 +150,8 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
     }
 
-    public String  getSort(Page<User> page) {
-        return  page.getSort().toString().replace(": ", ",");
+    public String getSort(Page<User> page) {
+        return page.getSort().toString().replace(": ", ",");
     }
 
     public void getReportExcel(String dateMin, String dateMax, HttpServletResponse response) throws IOException {
@@ -175,18 +167,17 @@ public class UserService implements UserDetailsService {
 
         LocalTime time = LocalTime.parse("00:00:00");
 
-        if(dateMin.equals("") && dateMax.equals(""))
-        {
+        if (dateMin.equals("") && dateMax.equals("")) {
             listUsers = userRepository.findAll();
 
         } else {
-            if(dateMax.equals("") || dateMax == null){
+            if (dateMax.equals("") || dateMax == null) {
                 datePartMax = LocalDate.now();
-            } else{
+            } else {
                 datePartMax = LocalDate.parse(dateMax);
             }
             LocalDate datePartMin = LocalDate.parse(dateMin);
-            listUsers = userRepository.findByCreatedAtBetween(LocalDateTime.of(datePartMin,time),LocalDateTime.of(datePartMax,time));
+            listUsers = userRepository.findByCreatedAtBetween(LocalDateTime.of(datePartMin, time), LocalDateTime.of(datePartMax, time));
         }
 
 

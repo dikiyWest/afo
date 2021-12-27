@@ -55,9 +55,11 @@ public class UserController {
     public String userSave(@RequestParam String username,
                            @RequestParam Map<String, String> form,
                            @RequestParam("userId") User user,
-                           @RequestParam("region") Region region
+                           @RequestParam("region") Region region,
+                           @RequestParam(defaultValue = "false") Boolean active
     ) {
-        user.setRegion(region);
+            user.setActive(active);
+            user.setRegion(region);
         userService.saveUser(user, username, form);
 
         return "redirect:/user";

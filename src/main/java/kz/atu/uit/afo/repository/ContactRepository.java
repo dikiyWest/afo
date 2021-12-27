@@ -16,7 +16,7 @@ public interface ContactRepository extends JpaRepository<Contact,Long> {
     Contact findByIin(String iin);
 
 
-    @Query("select c from Contact c  where 1 = ?#{hasAnyAuthority('ADMIN','Профориентатор')? 1:0} or c.careerСounselor.username = ?#{principal.username}")
+    @Query("select c from Contact c  where (1 = ?#{hasAnyAuthority('ADMIN','Куратор')? 1:0} or c.careerСounselor.username = ?#{principal.username})")
     Page<Contact> findAll(Pageable pageable);
 
     Page<Contact> findByActveAndCareerСounselor(Boolean active,User user,Pageable pageable);
