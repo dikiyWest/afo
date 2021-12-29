@@ -4,11 +4,12 @@ import kz.atu.uit.afo.domain.*;
 import kz.atu.uit.afo.repository.EducationProgrammRepository;
 import kz.atu.uit.afo.repository.EnrolleeRepository;
 import kz.atu.uit.afo.repository.RegionRepository;
-import kz.atu.uit.afo.service.reportService.ContactExcelReporter;
+import kz.atu.uit.afo.repository.UserRepository;
 import kz.atu.uit.afo.service.reportService.EnrolleeExcelReporter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
@@ -32,6 +33,9 @@ public class EnrolleeService {
     @Autowired
     private RegionRepository regionRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     public String getSort(Page<Enrollee> page) {
         return page.getSort().toString().replace(": ", ",");
     }
@@ -45,8 +49,8 @@ public class EnrolleeService {
                 if (enrollees == null || enrollees.isEmpty()) {
                     return enrolleeRepository.findAll(pageable);
                 }
-                return  enrollees;
-            }else {
+                return enrollees;
+            } else {
                 return enrollees;
             }
         } else {
@@ -80,24 +84,29 @@ public class EnrolleeService {
         }
     }
 
-    public boolean enrolleeAdd(Enrollee enrollee, User user, Region region, EducationProgramm educationProgramm, Long enrolleeId, String iin) {
+    public boolean enrolleeAdd(Enrollee enrollee, User user, Region region, EducationProgramm educationProgramm, Long enrolleeId, String iin, User toUser) {
         if (enrollee.getId() == null && enrolleeId == null) {
             if (checkIIN(enrollee.getIin())) {
                 return false;
             }
-            enrollee.setCareerСounselor(user);
+            enrollee.setCareerCounselor(user);
+            if (toUser != null)
+                enrollee.setCareerCounselor(toUser);
         } else {
             Enrollee enrolleeFromDb = enrolleeRepository.findById(enrolleeId).get();
             enrollee.setId(enrolleeFromDb.getId());
-            enrollee.setCareerСounselor(enrolleeFromDb.getCareerСounselor());
+            enrollee.setCareerCounselor(enrolleeFromDb.getCareerCounselor());
             enrollee.setIin(enrolleeFromDb.getIin());
             enrollee.setCreatedAt(enrolleeFromDb.getCreatedAt());
+            if (enrolleeFromDb.getCareerCounselor() != toUser)
+                enrollee.setCareerCounselor(toUser);
             if (!enrollee.getIin().equals(iin)) {
                 if (!checkIIN(iin)) {
                     enrollee.setIin(iin);
                 }
             }
         }
+
         enrollee.setRegion(region);
         enrollee.setEducationProgramm(educationProgramm);
         enrolleeRepository.save(enrollee);
@@ -119,9 +128,9 @@ public class EnrolleeService {
 
         if (dateMin.equals("") && dateMax.equals("") && user == null) {
             enrolleeList = enrolleeRepository.findAll();
-        } else if(dateMin.equals("") && dateMax.equals("") && user != null){
-            enrolleeList = enrolleeRepository.findByCareerСounselor(user);
-        }else {
+        } else if (dateMin.equals("") && dateMax.equals("") && user != null) {
+            enrolleeList = enrolleeRepository.findByCareerCounselor(user);
+        } else {
             if (dateMax.equals("") || dateMax == null) {
                 datePartMax = LocalDate.now();
             } else {
@@ -133,12 +142,17 @@ public class EnrolleeService {
                 enrolleeList = enrolleeRepository.findByCreatedAtBetween(LocalDateTime.of(datePartMin, time), LocalDateTime.of(datePartMax, time));
             } else {
                 LocalDate datePartMin = LocalDate.parse(dateMin);
-                enrolleeList = enrolleeRepository.findByCreatedAtBetweenAndCareerСounselor(LocalDateTime.of(datePartMin, time), LocalDateTime.of(datePartMax, time), user);
+                enrolleeList = enrolleeRepository.findByCreatedAtBetweenAndCareerCounselor(LocalDateTime.of(datePartMin, time), LocalDateTime.of(datePartMax, time), user);
             }
         }
 
 
         EnrolleeExcelReporter excelExporter = new EnrolleeExcelReporter(enrolleeList);
         excelExporter.export(response);
+    }
+
+    @PreAuthorize("hasAnyAuthority('ADMIN','Куратор')")
+    public List<User> getUsers() {
+        return userRepository.findByActiveIsTrue();
     }
 }

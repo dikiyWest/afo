@@ -5,11 +5,13 @@ import kz.atu.uit.afo.domain.Region;
 import kz.atu.uit.afo.domain.User;
 import kz.atu.uit.afo.repository.ContactRepository;
 import kz.atu.uit.afo.repository.RegionRepository;
+import kz.atu.uit.afo.repository.UserRepository;
 import kz.atu.uit.afo.service.reportService.ContactExcelReporter;
 import kz.atu.uit.afo.service.reportService.UserExcelReporter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
@@ -31,8 +33,11 @@ public class ContactService {
     @Autowired
     private RegionRepository regionRepository;
 
+    @Autowired
+    private UserRepository userRepository;
 
-    public Page<Contact> findAll(User user, Pageable pageable, String filter) {
+
+    public Page<Contact> findAll(Pageable pageable, String filter) {
 
         if (filter != null && !filter.isEmpty()) {
             Page<Contact> contacts = contactRepository.findByIinContaining(filter, pageable);
@@ -75,16 +80,18 @@ public class ContactService {
         }
     }
 
-    public boolean contactAdd(Contact contact, User user, Long contactId, String iin) {
+    public boolean contactAdd(Contact contact, User user, Long contactId, String iin, User toUser) {
         if (contact.getId() == null && contactId == null) {
             if (checkIIN(contact.getIin())) {
                 return false;
             }
-            contact.setCareerСounselor(user);
+            contact.setCareerCounselor(user);
+            if(toUser!=null)
+                contact.setCareerCounselor(toUser);
         } else {
             Contact contactFromDb = contactRepository.findById(contactId).get();
             contact.setId(contactFromDb.getId());
-            contact.setCareerСounselor(contactFromDb.getCareerСounselor());
+            contact.setCareerCounselor(contactFromDb.getCareerCounselor());
             contact.setIin(contactFromDb.getIin());
             contact.setCreatedAt(contactFromDb.getCreatedAt());
             if (!contact.getIin().equals(iin)) {
@@ -92,6 +99,8 @@ public class ContactService {
                     contact.setIin(iin);
                 }
             }
+            if(contactFromDb.getCareerCounselor() != toUser)
+                contact.setCareerCounselor(toUser);
         }
         contactRepository.save(contact);
         return true;
@@ -113,7 +122,7 @@ public class ContactService {
         if (dateMin.equals("") && dateMax.equals("") && user == null) {
             contactList = contactRepository.findAll();
         } else if (dateMin.equals("") && dateMax.equals("") && user != null) {
-            contactList = contactRepository.findByCareerСounselor(user);
+            contactList = contactRepository.findByCareerCounselor(user);
         } else {
             if (dateMax.equals("") || dateMax == null) {
                 datePartMax = LocalDate.now();
@@ -126,7 +135,7 @@ public class ContactService {
                 contactList = contactRepository.findByCreatedAtBetween(LocalDateTime.of(datePartMin, time), LocalDateTime.of(datePartMax, time));
             } else {
                 LocalDate datePartMin = LocalDate.parse(dateMin);
-                contactList = contactRepository.findByCreatedAtBetweenAndCareerСounselor(LocalDateTime.of(datePartMin, time), LocalDateTime.of(datePartMax, time), user);
+                contactList = contactRepository.findByCreatedAtBetweenAndCareerCounselor(LocalDateTime.of(datePartMin, time), LocalDateTime.of(datePartMax, time), user);
             }
         }
 
@@ -138,4 +147,15 @@ public class ContactService {
     private boolean isAdmin(User user) {
         return user.getRoles().contains("ADMIN");
     }
+
+    @PreAuthorize("hasAnyAuthority('ADMIN','Куратор')")
+    public List<User> getUsers() {
+        return userRepository.findByActiveIsTrue();
+    }
+
+    public List<Contact> getContacts() {
+        return contactRepository.findByEnableIsTrue();
+    }
+
+
 }

@@ -35,6 +35,13 @@ public class Activity implements DomainHelper {
     private String fileName;
 
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "contact_id")
+    private Contact contact;
+
+
+
+
 
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -150,6 +157,15 @@ public class Activity implements DomainHelper {
                 ", updatedAt=" + updatedAt +
                 '}';
     }
+
+    public Contact getContact() {
+        return contact;
+    }
+
+    public void setContact(Contact contact) {
+        this.contact = contact;
+    }
+
 
     @Override
     public Long getIdFromHelper() {

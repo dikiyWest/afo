@@ -1,3 +1,4 @@
+<#include "parts/security.ftl">
 <#import "parts/common.ftl" as c>
 <@c.page>
 
@@ -41,6 +42,7 @@
     </#if>
     </#if>
     </div>
+    <#include "parts/userSelect.ftl">
     <input type="hidden" name="_csrf" value="${_csrf.token}"/>
 <#if task??><#if task.id??> <input type="hidden" value="${task.id}" name="taskId"></#if></#if>
     <button class="btn btn-primary mt-3" type="submit">Save</button>

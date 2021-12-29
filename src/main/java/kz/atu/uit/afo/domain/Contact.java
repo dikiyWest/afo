@@ -18,7 +18,7 @@ public class Contact implements DomainHelper {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
-    private User careerСounselor;
+    private User careerCounselor;
 
     private String fio;
 
@@ -41,7 +41,7 @@ public class Contact implements DomainHelper {
     @JoinColumn(name = "region_id", referencedColumnName = "region_id")
     private Region region;
 
-    private boolean isActve;
+    private boolean enable;
 
     private String note;
 
@@ -63,12 +63,13 @@ public class Contact implements DomainHelper {
         this.id = id;
     }
 
-    public User getCareerСounselor() {
-        return careerСounselor;
+
+    public User getCareerCounselor() {
+        return careerCounselor;
     }
 
-    public void setCareerСounselor(User careerСounselor) {
-        this.careerСounselor = careerСounselor;
+    public void setCareerCounselor(User careerCounselor) {
+        this.careerCounselor = careerCounselor;
     }
 
     public String getFio() {
@@ -127,12 +128,13 @@ public class Contact implements DomainHelper {
         this.region = region;
     }
 
-    public boolean isActve() {
-        return isActve;
+
+    public boolean isEnable() {
+        return enable;
     }
 
-    public void setActve(boolean actve) {
-        isActve = actve;
+    public void setEnable(boolean enable) {
+        this.enable = enable;
     }
 
     public String getNote() {

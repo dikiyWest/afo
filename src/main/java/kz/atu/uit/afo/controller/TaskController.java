@@ -1,9 +1,6 @@
 package kz.atu.uit.afo.controller;
 
-import kz.atu.uit.afo.domain.Activity;
-import kz.atu.uit.afo.domain.Contact;
-import kz.atu.uit.afo.domain.Task;
-import kz.atu.uit.afo.domain.User;
+import kz.atu.uit.afo.domain.*;
 import kz.atu.uit.afo.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -30,12 +28,47 @@ public class TaskController {
     public String getTaskList(
             @RequestParam(required = false, defaultValue = "") String filter,
             Model model,
-            @PageableDefault(sort = {"createdAt"}, direction = Sort.Direction.DESC) Pageable pageable
+            @PageableDefault(sort = {"createdAt"}, direction = Sort.Direction.DESC) Pageable pageable,
+            HttpServletRequest request
     ) {
         Page<Task> page = taskService.findAll(pageable, filter);
         model.addAttribute("page", page);
         model.addAttribute("pageSort", taskService.getSort(page));
-        model.addAttribute("url", taskService.setUrl(filter));
+        model.addAttribute("url", taskService.setUrl(filter,request));
+        model.addAttribute("filter", filter);
+        model.addAttribute("nowLocalDateTime", LocalDateTime.now());
+        return "taskList";
+    }
+
+    @GetMapping("/contacts/{contact}")
+    public String getTaskList(
+            @RequestParam(required = false, defaultValue = "") String filter,
+            Model model,
+            @PageableDefault(sort = {"createdAt"}, direction = Sort.Direction.DESC) Pageable pageable,
+            HttpServletRequest request,
+            @PathVariable Contact contact
+    ) {
+        Page<Task> page = taskService.findByContact(pageable, filter,contact);
+        model.addAttribute("page", page);
+        model.addAttribute("pageSort", taskService.getSort(page));
+        model.addAttribute("url", taskService.setUrl(filter,request));
+        model.addAttribute("filter", filter);
+        model.addAttribute("nowLocalDateTime", LocalDateTime.now());
+        return "taskList";
+    }
+
+    @GetMapping("/enrolles/{enrollee}")
+    public String getTaskList(
+            @RequestParam(required = false, defaultValue = "") String filter,
+            Model model,
+            @PageableDefault(sort = {"createdAt"}, direction = Sort.Direction.DESC) Pageable pageable,
+            HttpServletRequest request,
+            @PathVariable Enrollee enrollee
+    ) {
+        Page<Task> page = taskService.findByEnrollee(pageable, filter,enrollee);
+        model.addAttribute("page", page);
+        model.addAttribute("pageSort", taskService.getSort(page));
+        model.addAttribute("url", taskService.setUrl(filter,request));
         model.addAttribute("filter", filter);
         model.addAttribute("nowLocalDateTime", LocalDateTime.now());
         return "taskList";
@@ -62,6 +95,7 @@ public class TaskController {
         model.addAttribute("type", taskService.getType(task));
         model.addAttribute("task",task);
         model.addAttribute("minDate", taskService.getNowDateFormat());
+        model.addAttribute("users",taskService.getUsers());
         model.addAttribute("typeList", taskService.getTypeList(taskService.getType(task)));
         return "taskAdd";
     }
@@ -73,6 +107,7 @@ public class TaskController {
     ) {
         model.addAttribute("type", type);
         model.addAttribute("minDate", taskService.getNowDateFormat());
+        model.addAttribute("users",taskService.getUsers());
         model.addAttribute("typeList", taskService.getTypeList(type));
         return "taskAdd";
     }
@@ -83,9 +118,10 @@ public class TaskController {
             @Valid Task task,
             @RequestParam(required = false, name = "taskId") Long taskId,
             @RequestParam("dateValueTask") String dateValueTask,
-            @RequestParam("timeValueTask") String timeValueTask
+            @RequestParam("timeValueTask") String timeValueTask,
+            @RequestParam("toUser") User toUser
     ) {
-        if(!taskService.taskSave(task,user,taskId,dateValueTask,timeValueTask)){
+        if(!taskService.taskSave(task,user,toUser,taskId,dateValueTask,timeValueTask)){
             return "taskAdd"; 
         }
 

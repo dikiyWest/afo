@@ -1,3 +1,4 @@
+<#include "parts/security.ftl">
 <#import "parts/common.ftl" as c>
 <@c.page>
     <#if check == "stay" || check == "checking">
@@ -51,6 +52,9 @@
         <label class="form-label"> Примечание : </label>
         <textarea class="form-control" aria-label="Примечание" name="note"><#if enrollee??>${enrollee.note!""}</#if></textarea>
     </div>
+
+    <#include "parts/userSelect.ftl">
+
     <input type="hidden" name="_csrf" value="${_csrf.token}"/>
 <#if enrollee??><#if enrollee.id??> <input type="hidden" value="${enrollee.id}" name="enrolleeId"></#if></#if>
     <button class="btn btn-primary mt-3" type="submit">Save</button>

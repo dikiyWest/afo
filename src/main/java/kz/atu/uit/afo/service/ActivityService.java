@@ -5,15 +5,19 @@ import kz.atu.uit.afo.domain.Contact;
 import kz.atu.uit.afo.domain.Region;
 import kz.atu.uit.afo.domain.User;
 import kz.atu.uit.afo.repository.ActivityRepository;
+import kz.atu.uit.afo.repository.ContactRepository;
 import kz.atu.uit.afo.repository.RegionRepository;
+import kz.atu.uit.afo.repository.UserRepository;
 import kz.atu.uit.afo.service.reportService.ActivityExcelReporter;
 import kz.atu.uit.afo.service.reportService.ContactExcelReporter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -33,6 +37,12 @@ public class ActivityService {
     @Autowired
     private RegionRepository regionRepository;
 
+    @Autowired
+    private ContactService contactService;
+
+    @Autowired
+    private UserRepository userRepository;
+
     public Page<Activity> findAll(Pageable pageable, String filter) {
         if (filter != null && !filter.isEmpty()) {
             Page<Activity> activitys = activityRepository.findByNameActivityContaining(filter, pageable);
@@ -50,11 +60,11 @@ public class ActivityService {
         return page.getSort().toString().replace(": ", ",");
     }
 
-    public Object setUrl(String filter) {
+    public Object setUrl(String filter, HttpServletRequest request) {
         if (filter != null && !filter.isEmpty()) {
-            return "/activity?filter=" + filter + "&";
+            return request.getRequestURI() + "?filter=" + filter + "&";
         } else {
-            return "/activity?";
+            return request.getRequestURI() +"?";
         }
     }
 
@@ -67,10 +77,12 @@ public class ActivityService {
         return formatter.format(LocalDateTime.now());
     }
 
-    public boolean activitySave(Activity activity, User user, Long activityId, String dateActivity, String timeActivity,MultipartFile file) {
+    public boolean activitySave(Activity activity, User user, User toUser, Long activityId, String dateActivity, String timeActivity, MultipartFile file) {
     if(activity.getId()==null && activityId == null){
         setDateActivity(activity,dateActivity,timeActivity);
         activity.setAuthor(user);
+        if(toUser!=null)
+            activity.setAuthor(toUser);
         activityRepository.save(activity);
         return true;
     }else {
@@ -86,6 +98,10 @@ public class ActivityService {
         activity.setId(activityFromDb.getId());
         activity.setCreatedAt(activityFromDb.getCreatedAt());
         activity.setAuthor(activityFromDb.getAuthor());
+
+        if(activityFromDb.getAuthor() != toUser)
+            activity.setAuthor(toUser);
+
         activityRepository.save(activity);
         return true;
     }
@@ -153,5 +169,27 @@ public class ActivityService {
 
         ActivityExcelReporter excelExporter = new ActivityExcelReporter(activities);
         excelExporter.export(response);
+    }
+
+    public List<Contact> getContacts() {
+        return contactService.getContacts();
+    }
+
+    @PreAuthorize("hasAnyAuthority('ADMIN','Куратор')")
+    public List<User> getUsers() {
+        return userRepository.findByActiveIsTrue();
+    }
+
+    public Page<Activity> findByContact(Pageable pageable, String filter,Contact contact) {
+        if (filter != null && !filter.isEmpty()) {
+            Page<Activity> activitys = activityRepository.findByNameActivityContainingAndContact(filter,contact, pageable);
+            if (activitys == null || activitys.isEmpty()) {
+                return activityRepository.findByContact(contact,pageable);
+            }else {
+                return activitys;
+            }
+        } else {
+            return activityRepository.findByContact(contact,pageable);
+        }
     }
 }

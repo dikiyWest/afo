@@ -1,3 +1,4 @@
+<#include "parts/security.ftl">
 <#import "parts/common.ftl" as c>
 <#import "parts/pager.ftl" as p>
 <@c.page>
@@ -6,7 +7,7 @@
 <div class="container">
     <div class="row mt-2">
         <div class="col-10">
-            <form method="get" action="/enrollee" class="row row-cols-lg-auto g-3 align-items-center">
+            <form method="get" action="${url}" class="row row-cols-lg-auto g-3 align-items-center">
                 <div class="form-group col-md-7">
                     <div class="input-group">
                         <input class="form-control" type="text" name="filter" value="${filter?ifExists}"
@@ -19,7 +20,7 @@
         </div>
         </form>
         <div class="col">
-            <form method="get" action="/enrollee" class="row row-cols-lg-auto g-3 align-items-center">
+            <form method="get" action="${url}" class="row row-cols-lg-auto g-3 align-items-center">
                 <select class="form-select bg-size" name="sort" id="sort" onchange="this.form.submit()">
                     <option value="createdAt,DESC" <#if pageSort == "createdAt,DESC">selected</#if>>Дата создания по убыванию</option>
                     <option value="createdAt,ASC" <#if pageSort=="createdAt,ASC">selected</#if>>Дата создания по возрастанию</option>
@@ -43,6 +44,10 @@
             <th>Телефон</th>
             <th>Email</th>
             <th>Дата создания</th>
+            <th>Задачи</th>
+            <#if isAdmin || isKurator>
+            <th>Профоринтатор</th>
+            </#if>
             <th>Действие</th>
         </tr>
         </thead>
@@ -56,6 +61,10 @@
         <td>${enrollee.phone?ifExists}</td>
         <td>${enrollee.email?ifExists}</td>
         <td>${enrollee.getFormatCreatedAt()?ifExists}</td>
+        <td><a class="btn btn-warning" href="/task/enrolles/${enrollee.id}">Просмотреть задачи</a></td>
+        <#if isAdmin || isKurator>
+            <td>${enrollee.getCareerCounselor().fio?ifExists}</td>
+        </#if>
         <td><a class="btn btn-outline-info" href="/enrollee/${enrollee.id}">Редактировать</a></td>
     </tr>
     </#list>

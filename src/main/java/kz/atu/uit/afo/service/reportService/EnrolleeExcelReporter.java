@@ -82,7 +82,7 @@ public class EnrolleeExcelReporter {
             createCell(row, columnCount++, enrollee.getUniversity(), style);
             createCell(row, columnCount++, enrollee.getEducationProgramm().getNameEducation(), style);
             createCell(row, columnCount++, enrollee.getRegion().getNameRegion(), style);
-            createCell(row, columnCount++, enrollee.getCareerСounselor().getFio(), style);
+            createCell(row, columnCount++, enrollee.getCareerCounselor().getFio(), style);
             createCell(row, columnCount++, enrollee.getCreatedAt(), style);
             createCell(row, columnCount++, enrollee.getUpdatedAt(), style);
 

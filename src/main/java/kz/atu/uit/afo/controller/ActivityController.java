@@ -1,6 +1,7 @@
 package kz.atu.uit.afo.controller;
 
 import kz.atu.uit.afo.domain.Activity;
+import kz.atu.uit.afo.domain.Contact;
 import kz.atu.uit.afo.domain.User;
 import kz.atu.uit.afo.service.ActivityService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
@@ -37,12 +39,30 @@ public class ActivityController {
     public String activityList(
             @RequestParam(required = false,defaultValue = "") String filter,
             Model model,
-            @PageableDefault(sort = {"createdAt"}, direction = Sort.Direction.DESC) Pageable pageable
+            @PageableDefault(sort = {"createdAt"}, direction = Sort.Direction.DESC) Pageable pageable,
+            HttpServletRequest request
             ){
         Page<Activity> page = activityService.findAll(pageable,filter);
         model.addAttribute("page",page);
         model.addAttribute("pageSort", activityService.getSort(page));
-        model.addAttribute("url", activityService.setUrl(filter));
+        model.addAttribute("url", activityService.setUrl(filter,request));
+        model.addAttribute("filter", filter);
+        return "activityList";
+    }
+
+    @GetMapping("/contacts/{contact}")
+    public String activityListForContact(
+            @RequestParam(required = false,defaultValue = "") String filter,
+            Model model,
+            @PageableDefault(sort = {"createdAt"}, direction = Sort.Direction.DESC) Pageable pageable,
+            HttpServletRequest request,
+            @PathVariable Contact contact
+            ){
+        Page<Activity> page = activityService.findByContact(pageable,filter,contact);
+        model.addAttribute("page",page);
+        model.addAttribute("pageSort", activityService.getSort(page));
+        model.addAttribute("url", activityService.setUrl(filter,request));
+        model.addAttribute("defaultUrl", request.getRequestURI());
         model.addAttribute("filter", filter);
         return "activityList";
     }
@@ -53,6 +73,8 @@ public class ActivityController {
     ){
         model.addAttribute("regions", activityService.getRegions());
         model.addAttribute("minDate",activityService.getNowDateFormat());
+        model.addAttribute("contacts",activityService.getContacts());
+        model.addAttribute("users",activityService.getUsers());
         return "activityAdd";
     }
 
@@ -64,6 +86,8 @@ public class ActivityController {
         model.addAttribute("activity",activity);
         model.addAttribute("regions", activityService.getRegions());
         model.addAttribute("minDate",activityService.getNowDateFormat());
+        model.addAttribute("contacts",activityService.getContacts());
+        model.addAttribute("users",activityService.getUsers());
         return "activityAdd";
     }
 
@@ -75,11 +99,12 @@ public class ActivityController {
             @RequestParam("file") MultipartFile file,
             @RequestParam(required = false, name = "activityId") Long activityId,
             @RequestParam("dateValueActivity")String dateActivity,
-            @RequestParam("timeValueActivity")String timeActivity
+            @RequestParam("timeValueActivity")String timeActivity,
+            @RequestParam("toUser") User toUser
             ) throws IOException {
         saveFile(activity,file);
 
-        if(!activityService.activitySave(activity,user,activityId,dateActivity,timeActivity,file)){
+        if(!activityService.activitySave(activity,user,toUser,activityId,dateActivity,timeActivity,file)){
             return "activityAdd";
         }
 

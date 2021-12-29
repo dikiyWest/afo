@@ -1,12 +1,12 @@
+<#include "parts/security.ftl">
 <#import "parts/common.ftl" as c>
 <#import "parts/pager.ftl" as p>
 <@c.page>
-
 <a class="btn btn-primary mb-3" href="/activity/activityAdd">Добавить</a>
 <div class="container">
     <div class="row mt-2">
         <div class="col-10">
-            <form method="get" action="/activity" class="row row-cols-lg-auto g-3 align-items-center">
+            <form method="get" action="${url}" class="row row-cols-lg-auto g-3 align-items-center">
                 <div class="form-group col-md-7">
                     <div class="input-group">
                         <input class="form-control" type="text" name="filter" value="${filter?ifExists}"
@@ -19,7 +19,7 @@
         </div>
         </form>
         <div class="col">
-            <form method="get" action="/activity" class="row row-cols-lg-auto g-3 align-items-center">
+            <form method="get" action="${url}" class="row row-cols-lg-auto g-3 align-items-center">
                 <select class="form-select bg-size" name="sort" id="sort" onchange="this.form.submit()">
                     <option value="createdAt,DESC" <#if pageSort == "createdAt,DESC">selected</#if>>Дата создания по убыванию</option>
                     <option value="createdAt,ASC" <#if pageSort=="createdAt,ASC">selected</#if>>Дата создания по возрастанию</option>
@@ -41,7 +41,11 @@
             <th>Формат</th>
             <th>Учебное заведение</th>
             <th>Регион</th>
+            <th>Контакт</th>
             <th>Документы</th>
+            <#if isAdmin || isKurator>
+            <th>Профоринтатор</th>
+            </#if>
             <th>Действие</th>
         </tr>
         </thead>
@@ -53,7 +57,11 @@
         <td>${activity.formatActivity?ifExists}</td>
         <td>${activity.placeActivity?ifExists}</td>
         <td>${activity.region.nameRegion?ifExists}</td>
+        <td><#if activity.contact??>${activity.contact.getFio()?ifExists}</#if></td>
         <td><a class="btn btn-outline-secondary" href="/zip/${activity.getFileName()?ifExists}" target="_blank">Скачать</a> </td>
+        <#if isAdmin || isKurator>
+            <td>${activity.getAuthor().fio?ifExists}</td>
+        </#if>
         <td><a class="btn btn-outline-info" href="/activity/${activity.id}">Редактировать</a></td>
     </tr>
     </#list>

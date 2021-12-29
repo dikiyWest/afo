@@ -93,6 +93,10 @@ public class User implements UserDetails {
         return roles.contains(Role.ADMIN);
     }
 
+    public boolean isKurator(){
+        return roles.contains(Role.Куратор);
+    }
+
 
     public Long getId() {
         return id;

@@ -21,7 +21,7 @@ public class Task {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
-    private User careerСounselor;
+    private User careerCounselor;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "activity_id")
@@ -78,12 +78,12 @@ public class Task {
         this.description = description;
     }
 
-    public User getCareerСounselor() {
-        return careerСounselor;
+    public User getCareerCounselor() {
+        return careerCounselor;
     }
 
-    public void setCareerСounselor(User careerСounselor) {
-        this.careerСounselor = careerСounselor;
+    public void setCareerCounselor(User careerCounselor) {
+        this.careerCounselor = careerCounselor;
     }
 
     public Activity getActivity() {
@@ -151,7 +151,7 @@ public class Task {
                 ", dateTask=" + dateTask +
                 ", nameTask='" + nameTask + '\'' +
                 ", description='" + description + '\'' +
-                ", careerСounselor=" + careerСounselor +
+                ", careerCounselor=" + careerCounselor +
                 ", activity=" + activity +
                 ", contact=" + contact +
                 ", enrollee=" + enrollee +

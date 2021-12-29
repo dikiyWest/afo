@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
 
@@ -26,13 +27,11 @@ public class ContactController {
 
     @GetMapping
     public String getContactList(
-            @AuthenticationPrincipal User user,
             @RequestParam(required = false,defaultValue = "") String filter,
             Model model,
-            @PageableDefault(sort = {"createdAt"},direction = Sort.Direction.DESC)Pageable pageable,
-            Principal principal
+            @PageableDefault(sort = {"createdAt"},direction = Sort.Direction.DESC)Pageable pageable
             ){
-        Page<Contact> page = contactService.findAll(user,pageable,filter);
+        Page<Contact> page = contactService.findAll(pageable,filter);
         model.addAttribute("page",page);
         model.addAttribute("pageSort", contactService.getSort(page));
         model.addAttribute("url", contactService.setUrl(filter));
@@ -58,6 +57,7 @@ public class ContactController {
                 model.addAttribute("iin", iin);
                 model.addAttribute("error", null);
                 model.addAttribute("regions", contactService.getRegions());
+                model.addAttribute("users",contactService.getUsers());
                 model.addAttribute("check", check);
             }
         }
@@ -72,6 +72,7 @@ public class ContactController {
         model.addAttribute("contact",contact);
         model.addAttribute("regions",contactService.getRegions());
         model.addAttribute("check","edit");
+        model.addAttribute("users",contactService.getUsers());
         return "contactAdd";
     }
 
@@ -80,10 +81,13 @@ public class ContactController {
             @Valid Contact contact,
             @AuthenticationPrincipal User user,
             @RequestParam(required = false, name = "contactId") Long contactId,
-            @RequestParam(required = false,defaultValue = "") String iin
+            @RequestParam(required = false,defaultValue = "") String iin,
+            @RequestParam(name = "isActve",defaultValue = "false") Boolean active,
+            @RequestParam("toUser") User toUser
             ){
 
-        if (!contactService.contactAdd(contact, user,contactId,iin)) {
+        contact.setEnable(active);
+        if (!contactService.contactAdd(contact, user,contactId,iin,toUser)) {
             return "contactAdd";
         }
         return "redirect:/contact";

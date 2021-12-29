@@ -18,7 +18,7 @@ public class Enrollee implements DomainHelper {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
-    private User careerСounselor;
+    private User careerCounselor;
 
 
     private String fio;
@@ -63,12 +63,12 @@ public class Enrollee implements DomainHelper {
         this.id = id;
     }
 
-    public User getCareerСounselor() {
-        return careerСounselor;
+    public User getCareerCounselor() {
+        return careerCounselor;
     }
 
-    public void setCareerСounselor(User careerСounselor) {
-        this.careerСounselor = careerСounselor;
+    public void setCareerCounselor(User careerCounselor) {
+        this.careerCounselor = careerCounselor;
     }
 
     public String getFio() {
@@ -164,7 +164,7 @@ public class Enrollee implements DomainHelper {
     public String toString() {
         return "Enrollee{" +
                 "id=" + id +
-                ", careerСounselor=" + careerСounselor +
+                ", careerCounselor=" + careerCounselor +
                 ", fio='" + fio + '\'' +
                 ", iin='" + iin + '\'' +
                 ", phone='" + phone + '\'' +

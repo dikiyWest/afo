@@ -76,8 +76,8 @@ public class ContactExcelReporter {
 
             createCell(row, columnCount++, contact.getId(), style);
             createCell(row, columnCount++, contact.getFio(), style);
-            createCell(row, columnCount++, contact.isActve(), style);
-            createCell(row, columnCount++, contact.getCareerСounselor().getFio(), style);
+            createCell(row, columnCount++, contact.isEnable(), style);
+            createCell(row, columnCount++, contact.getCareerCounselor().getFio(), style);
             createCell(row, columnCount++, contact.getCreatedAt(), style);
             createCell(row, columnCount++, contact.getUpdatedAt(), style);
 

@@ -1,3 +1,4 @@
+<#include "parts/security.ftl">
 <#import "parts/common.ftl" as c>
 <@c.page>
     <#if check == "stay" || check == "checking">
@@ -60,8 +61,11 @@
         <textarea class="form-control" aria-label="Примечание"
                   name="note"><#if contact??>${contact.note!""}</#if></textarea>
     </div>
+
+    <#include "parts/userSelect.ftl">
+
     <div class="form-check form-switch">
-        <input role="switch" class="form-check-input" type="checkbox" name="isActve" id="flexSwitchUser" <#if user??>${user.isActve?string("checked","")}</#if>>
+        <input role="switch" class="form-check-input" type="checkbox" name="isActve" id="flexSwitchUser" <#if contact??>${contact.isActve()?string("checked","")}</#if>>
         <label class="form-check-label" for="flexSwitchUser">Активировать</label>
     </div>
     <input type="hidden" name="_csrf" value="${_csrf.token}"/>

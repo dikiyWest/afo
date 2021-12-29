@@ -58,6 +58,7 @@ public class EnrolleeController {
                 model.addAttribute("iin", iin);
                 model.addAttribute("error", null);
                 model.addAttribute("educationProgramms", enrolleeService.getEducationProgramms());
+                model.addAttribute("users",enrolleeService.getUsers());
                 model.addAttribute("regions", enrolleeService.getRegions());
                 model.addAttribute("check", check);
             }
@@ -74,6 +75,7 @@ public class EnrolleeController {
         model.addAttribute("check","edit");
         model.addAttribute("educationProgramms", enrolleeService.getEducationProgramms());
         model.addAttribute("regions", enrolleeService.getRegions());
+        model.addAttribute("users",enrolleeService.getUsers());
         return "enrolleeAdd";
     }
 
@@ -84,9 +86,10 @@ public class EnrolleeController {
             @RequestParam("region") Region region,
             @RequestParam("educationProgramm") EducationProgramm educationProgramm,
             @RequestParam(required = false, name = "enrolleeId") Long enrolleeId,
-            @RequestParam(required = false,defaultValue = "") String iin
+            @RequestParam(required = false,defaultValue = "") String iin,
+            @RequestParam("toUser") User toUser
     ) {
-        if (!enrolleeService.enrolleeAdd(enrollee, user, region, educationProgramm,enrolleeId,iin)) {
+        if (!enrolleeService.enrolleeAdd(enrollee, user, region, educationProgramm,enrolleeId,iin,toUser)) {
             return "enrolleeAdd";
         }
         return "redirect:/enrollee";

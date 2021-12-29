@@ -10,7 +10,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/">Home</a>
+                    <a class="nav-link" aria-current="page" href="/">Home</a>
                 </li>
             <!--    <li class="nav-item">
                     <a class="nav-link" href="/main">Messages</a>
@@ -22,27 +22,27 @@
                 </#if>-->
                 <#if isAdmin>
                 <li class="nav-item">
-                    <a class="nav-link" href="/user">Пользователи</a>
+                    <a class="nav-link <#if currentPageUrl == '/user'>active</#if>" href="/user">Пользователи</a>
                 </li>
                 </#if>
                   <#if isAdmin>
                 <li class="nav-item">
-                    <a class="nav-link" href="/enrollee">Поступающие</a>
+                    <a class="nav-link <#if currentPageUrl == '/enrollee'>active</#if>" href="/enrollee">Поступающие</a>
                 </li>
                   </#if>
                   <#if isAdmin>
                 <li class="nav-item">
-                    <a class="nav-link" href="/activity">Мероприятия</a>
+                    <a class="nav-link <#if currentPageUrl == '/activity'>active</#if>" href="/activity">Мероприятия</a>
                 </li>
                   </#if>
                    <#if isAdmin>
                 <li class="nav-item">
-                    <a class="nav-link" href="/contact">Контакты</a>
+                    <a class="nav-link <#if currentPageUrl == '/contact'>active</#if>" href="/contact">Контакты</a>
                 </li>
                    </#if>
                    <#if isAdmin>
                 <li class="nav-item">
-                    <a class="nav-link" href="/task">Задачи</a>
+                    <a class="nav-link <#if currentPageUrl == '/task'>active</#if>" href="/task">Задачи</a>
                 </li>
                    </#if>
                 <li class="nav-item dropdown">
