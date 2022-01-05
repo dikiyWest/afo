@@ -5,6 +5,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
@@ -18,19 +20,26 @@ public class Activity implements DomainHelper {
     @JoinColumn(name = "user_id")
     private User author;
 
+    @NotEmpty(message = "Дата не может быть пустой")
     private LocalDateTime dateActivity;
 
+    @NotEmpty(message = "Название мероприятия не может быть пустым")
     private String nameActivity;
 
+    @NotEmpty(message = "Формат не может быть пустым")
     private String formatActivity;
 
+    @NotEmpty(message = "Место не может быть пустым")
     private String  placeActivity;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "region_id", referencedColumnName = "region_id")
     private Region region;
 
+    @NotEmpty(message = "Число не может быть пустым")
+    @Min(value = 0,message = "Число больше 0")
     private int countPeople;
+
 
     private String fileName;
 

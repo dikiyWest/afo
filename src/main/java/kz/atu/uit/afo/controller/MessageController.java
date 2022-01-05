@@ -39,7 +39,7 @@ public class MessageController {
 
     @GetMapping("/")
     public String greeting(Map<String, Object> model) {
-        return "greeting";
+        return "redirect:/task";
     }
 
     @GetMapping("/main")

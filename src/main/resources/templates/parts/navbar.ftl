@@ -8,10 +8,10 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto">
-                <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="/">Home</a>
-                </li>
+        <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="/">Home</a>
+            </li>
             <!--    <li class="nav-item">
                     <a class="nav-link" href="/main">Messages</a>
                 </li>
@@ -25,28 +25,31 @@
                     <a class="nav-link <#if currentPageUrl == '/user'>active</#if>" href="/user">Пользователи</a>
                 </li>
                 </#if>
-                  <#if isAdmin>
+                  <#if know>
                 <li class="nav-item">
                     <a class="nav-link <#if currentPageUrl == '/enrollee'>active</#if>" href="/enrollee">Поступающие</a>
                 </li>
                   </#if>
-                  <#if isAdmin>
+                  <#if know>
                 <li class="nav-item">
                     <a class="nav-link <#if currentPageUrl == '/activity'>active</#if>" href="/activity">Мероприятия</a>
                 </li>
                   </#if>
-                   <#if isAdmin>
+                   <#if know>
                 <li class="nav-item">
                     <a class="nav-link <#if currentPageUrl == '/contact'>active</#if>" href="/contact">Контакты</a>
                 </li>
                    </#if>
-                   <#if isAdmin>
+                   <#if know>
                 <li class="nav-item">
                     <a class="nav-link <#if currentPageUrl == '/task'>active</#if>" href="/task">Задачи</a>
                 </li>
                    </#if>
+
+                <#if know>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                       data-bs-toggle="dropdown" aria-expanded="false">
                         Отчеты
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -57,8 +60,9 @@
 
                     </ul>
                 </li>
-
+                </#if>
             </ul>
+
             <#if know>
             <div class="me-md-3 navbar-text">${name}</div>
             <div class="navbar-text">
@@ -67,7 +71,7 @@
 
             <#else>
 
-            <a class="btn btn-primary ml-3" href="/main">Sign in</a>
+            <a class="btn btn-primary ml-3" href="/main">Войти</a>
 
             </#if>
 

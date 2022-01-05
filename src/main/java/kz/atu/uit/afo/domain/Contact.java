@@ -7,6 +7,8 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -20,6 +22,7 @@ public class Contact implements DomainHelper {
     @JoinColumn(name = "user_id")
     private User careerCounselor;
 
+    @NotEmpty(message = "ФИО не может быть пустым")
     private String fio;
 
 
@@ -27,13 +30,19 @@ public class Contact implements DomainHelper {
     @Length(min = 12, max = 12, message = "Введите верный иин")
     private String iin;
 
+    @NotEmpty(message = "Место работы не может быть пустым")
     private String placeOfWork;
+
+    @NotEmpty(message = "Должность не можеть пустым")
     private String position;
 
 
+    @NotBlank(message = "Мобильный телефон не может быть пустым")
     private String phoneMobile;
+    @NotBlank(message = "Городской телефон не может быть пустым")
     private String phoneCity;
 
+    @NotBlank(message = "Email не может быть пустым")
     @Email
     private String email;
 

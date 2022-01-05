@@ -60,6 +60,6 @@
     <#include "parts/userSelect.ftl">
     <input type="hidden" name="_csrf" value="${_csrf.token}"/>
 <#if activity??><#if activity.id??> <input type="hidden" value="${activity.id}" name="activityId"></#if></#if>
-    <button class="btn btn-primary mt-3" type="submit">Save</button>
+    <button class="btn btn-primary mt-3" type="submit">Сохранить</button>
 </form>
 </@c.page>

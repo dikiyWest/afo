@@ -6,6 +6,7 @@ import kz.atu.uit.afo.domain.User;
 import kz.atu.uit.afo.repository.RegionRepository;
 import kz.atu.uit.afo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,6 +26,7 @@ public class RegistrationController {
     @Autowired
     private RegionRepository regionRepository;
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/registration")
     public String registration(Model model){
         Iterable<Region> region = regionRepository.findAll();
@@ -33,23 +35,32 @@ public class RegistrationController {
         return "registration";
     }
 
+
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/registration")
-    public String addUser(@Valid User user,
+    public String addUser( @Valid User user,
                           BindingResult bindingResult,
                           Model model,
                           @RequestParam("region")Region region,
                           @RequestParam Map<String, String> form){
+
         if(bindingResult.hasErrors()){
+            Iterable<Region> regions = regionRepository.findAll();
             Map<String, String> errors = ControllerUtill.getErrors(bindingResult);
             model.mergeAttributes(errors);
+            model.addAttribute("roles", Role.values());
+            model.addAttribute("regions", regions);
             return "registration";
         }
         if(!userService.addUser(user,form,region)){
-            model.addAttribute("usernameError","User exists!");
+            Iterable<Region> regions = regionRepository.findAll();
+            model.addAttribute("usernameError","Пользователь существует!");
+            model.addAttribute("roles", Role.values());
+            model.addAttribute("regions", regions);
             return "registration";
         }
 
 
-        return "redirect:/login";
+        return "redirect:/user";
     }
 }

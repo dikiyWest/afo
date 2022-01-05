@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
@@ -21,20 +22,28 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotBlank(message = "Username cannot be empty")
+
+    @NotBlank(message = "Пользователь не может быть пустым")
     private String username;
-    @NotBlank(message = "Password cannot be empty")
+    @NotBlank(message = "Пароль не может быть пустым")
     private String password;
+
     private boolean active;
 
+    @NotEmpty(message = "ФИО не может быть пустым")
     private String fio;
 
     @Length(min = 12, max = 12, message = "Введите верный иин")
     private String iin;
+
+    @NotEmpty(message = "Телефон не может быть пустым")
     private String phone;
 
+    @NotBlank(message = "Email не может быть пустым")
     @Email
     private String email;
+
+    @NotEmpty(message = "Место работы не может быть пустым")
     private String placeOfWork;
 
 

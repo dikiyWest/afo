@@ -57,7 +57,7 @@
 
     <input type="hidden" name="_csrf" value="${_csrf.token}"/>
 <#if enrollee??><#if enrollee.id??> <input type="hidden" value="${enrollee.id}" name="enrolleeId"></#if></#if>
-    <button class="btn btn-primary mt-3" type="submit">Save</button>
+    <button class="btn btn-primary mt-3" type="submit">Сохранить</button>
 </form>
 
     </#if>

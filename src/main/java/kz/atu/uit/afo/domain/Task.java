@@ -4,6 +4,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
 
 @Entity
@@ -13,10 +15,13 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
     private LocalDateTime dateTask;
 
+    @NotEmpty(message = "Название задачи не может быть пустым")
     private String nameTask;
 
+    @NotEmpty(message = "Описание не может быть пустым")
     private String description;
 
     @ManyToOne(fetch = FetchType.EAGER)

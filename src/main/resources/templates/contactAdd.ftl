@@ -70,7 +70,7 @@
     </div>
     <input type="hidden" name="_csrf" value="${_csrf.token}"/>
 <#if contact??><#if contact.id??> <input type="hidden" value="${contact.id}" name="contactId"></#if></#if>
-    <button class="btn btn-primary mt-3" type="submit">Save</button>
+    <button class="btn btn-primary mt-3" type="submit">Сохранить</button>
 </form>
 
     </#if>
